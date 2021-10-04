@@ -1,7 +1,7 @@
 HttpClientMock
 ==============
 
-A really simple http mock using self host service.
+A really simple http client mock.
 
 ### Match by simple url
 

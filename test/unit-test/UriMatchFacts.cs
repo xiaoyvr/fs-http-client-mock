@@ -1,24 +1,24 @@
 ﻿using System.Net;
-using SimpleHttpMock;
+using HttpClientMock;
 using Xunit;
 
-namespace test
+namespace UnitTest
 {
-    public class UriMatchFacts : TestBase
+    public class UriMatchFacts
     {
         [Fact]
         public void should_match_url_contains_question_mark()
         {
-            var serverBuilder = new MockedHttpServerBuilder();
+            var serverBuilder = new MockedHttpClientBuilder();
             serverBuilder
                 .WhenGet("/staff?employeeId=Staff0001")
                 .Respond(HttpStatusCode.InternalServerError);
 
             const string baseAddress = "http://localhost:1122";
-            using (serverBuilder.Build(baseAddress))
+            using (var httpClient = serverBuilder.Build(baseAddress))
             {
                 const string requestUri = "http://localhost:1122/staff?employeeId=Staff0001";
-                var response = Get(requestUri);
+                var response = httpClient.GetAsync(requestUri).Result;
                 Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
             }
         }

@@ -1,9 +1,8 @@
 ﻿using System.Text.RegularExpressions;
-using SimpleHttpMock;
+using HttpClientMock;
 using Xunit;
-using Xunit.Extensions;
 
-namespace test
+namespace UnitTest
 {
     public class WildcardMatcherFacts
     {

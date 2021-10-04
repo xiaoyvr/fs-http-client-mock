@@ -1,4 +1,5 @@
-Microsoft.AspNet.WebApi.Core
-Microsoft.Net.Http
-Microsoft.Owin.Host.HttpListener
-xunit.extensions
+xunit
+Microsoft.NET.Test.Sdk
+xunit.runner.visualstudio
+Microsoft.AspNetCore
+System.Net.Http.Json

@@ -2,29 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Web.Http;
 
-namespace SimpleHttpMock
+namespace HttpClientMock
 {
-    public class MockedHttpServerBuilder
+    public class MockedHttpClientBuilder
     {
         private readonly List<RequestBehaviorBuilder> builders = new List<RequestBehaviorBuilder>();
-        public MockedHttpServer Build(string baseAddress, Action<HttpConfiguration> setup = null)
+
+        public HttpClient Build(string baseAddress)
         {
             var requestBehaviors = new RequestBehaviors(builders.Select(b => b.Build()));
             var handler = new MockHandler(requestBehaviors);
-            return new MockedHttpServer(handler, baseAddress, setup);
+            return new HttpClient(handler)
+            {
+                BaseAddress = new Uri(baseAddress)
+            };
         }
 
-        public void Build(MockedHttpServer server, bool renew = false)
-        {
-            server.ReconfigureBehaviors(builders.Select(b => b.Build()), renew);
-        }
-
-        public void Reconfigure(MockedHttpServer server, bool renew)
-        {
-            server.ReconfigureBehaviors(builders.Select(b => b.Build()), renew);
-        }
 
         public RequestBehaviorBuilder WhenGet(string uri)
         {

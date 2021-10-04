@@ -1,6 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿﻿using System.Text.RegularExpressions;
 
-namespace SimpleHttpMock
+ namespace HttpClientMock
 {
     public class WildCardMatcher
     {
@@ -15,8 +15,8 @@ namespace SimpleHttpMock
 
         public bool Match(string s)
         {
-            var regexPattern = string.Format("^{0}$", Regex.Escape(pattern))
-                                     .Replace("\\*", ".*")
+            var regexPattern = $"^{Regex.Escape(pattern)}$"
+                .Replace("\\*", ".*")
                                      .Replace("\\?",".");
             return new Regex(regexPattern, regexOptions).Match(s).Success;
         }

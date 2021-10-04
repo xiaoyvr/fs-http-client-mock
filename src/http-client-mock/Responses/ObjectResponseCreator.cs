@@ -1,8 +1,8 @@
-using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Json;
 
-namespace SimpleHttpMock.responses
+namespace HttpClientMock.Responses
 {
     public class ObjectResponseCreator : IResponseCreator
     {
@@ -15,7 +15,11 @@ namespace SimpleHttpMock.responses
 
         public HttpResponseMessage CreateResponseFor(HttpRequestMessage request, HttpStatusCode statusCode)
         {
-            return request.CreateResponse(statusCode, content);
+            var httpResponseMessage = new HttpResponseMessage(statusCode)
+            {
+                Content = JsonContent.Create(content)  
+            };
+            return httpResponseMessage;
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace SimpleHttpMock
+namespace HttpClientMock
 {
-    public class Matchers
+    public static class Matchers
     {
         public static Func<string, bool> Regex(string regexPattern)
         {

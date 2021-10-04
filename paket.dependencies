@@ -1,7 +1,8 @@
-source https://www.nuget.org/api/v2
+source https://api.nuget.org/v3/index.json
 
 nuget FAKE
-nuget Microsoft.AspNet.WebApi.OwinSelfHost 5.2.3 framework: >= net461
-nuget Microsoft.Net.Http 2.0.20710.0 framework: >= net461
-nuget xunit.extensions 1.9.2 framework: >= net40
-nuget xunit.runners 1.9.2
+nuget Microsoft.AspNetCore 2.2.0 strategy: min
+nuget Microsoft.NET.Test.Sdk
+nuget System.Net.Http.Json
+nuget xunit
+nuget xunit.runner.visualstudio

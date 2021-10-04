@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using Newtonsoft.Json;
 
-namespace test
+namespace UnitTest
 {
     public class TestBase
     {

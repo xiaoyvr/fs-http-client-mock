@@ -1,4 +1,4 @@
-SimpleHttpMock [![Build status](https://ci.appveyor.com/api/projects/status/wpscw2efwccjr0l4?svg=true)](https://ci.appveyor.com/project/xiaoyvr/simplehttpmock)
+HttpClientMock
 ==============
 
 A really simple http mock using self host service.
@@ -6,72 +6,49 @@ A really simple http mock using self host service.
 ### Match by simple url
 
 ```cs
-var builder = new MockedHttpServerBuilder();
+var builder = new MockedHttpClientBuilder();
 builder
     .WhenGet("/Test")
     .Respond(HttpStatusCode.OK);
-using (builder.Build("http://localhost:1122"))
-using (var httpClient = new HttpClient())
-{
-    var response = await httpClient.GetAsync("http://localhost:1122/test");
-    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-}
+using var httpClient = builder.Build("http://localhost:1122");
+var response = await httpClient.GetAsync("http://localhost:1122/test");
+Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
 ```
 
 ### Return some response
 ```cs
-var builder = new MockedHttpServerBuilder();
+var builder = new MockedHttpClientBuilder();
 builder
     .WhenGet("/Test")
     .Respond(HttpStatusCode.OK, new People { Name = "John Doe"});
-using (builder.Build("http://localhost:1122"))
-using (var httpClient = new HttpClient())
-{
-    var response = await httpClient.GetAsync("http://localhost:1122/test");
-    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-    var people = await response.ReadAsAsync<People>()
-    Assert.Equal("John Doe", people.Name);
-}
+    
+using var httpClient = builder.Build("http://localhost:1122");
+var response = await httpClient.GetAsync("http://localhost:1122/test");
+Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+var people = await response.ReadAsAsync<People>();
+Assert.Equal("John Doe", people.Name);
+
 ```
 
-### Create server first, build behavior afterwards
-```cs
-using (var server = new MockedHttpServer("http://localhost:1122"))
-{
-    var builder = new MockedHttpServerBuilder();
-    builder.WhenGet("/test").Respond(HttpStatusCode.OK);
-    builder.Build(server);
-    using (var httpClient = new HttpClient())
-    {
-        var response = httpClient.GetAsync("http://localhost:1122/test");
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-    }
-}
-```
-
-### Retrieve request being sent
+### Capture request being sent
 
 ```cs
-var builder = new MockedHttpServerBuilder();
-var requestRetriever = builder.WhenGet("/test").Respond(HttpStatusCode.OK).Retrieve();
-using (builder.Build("http://localhost:1122"))
-{
-    using (var httpClient = new HttpClient())
-    {
-        // no request being sent yet
-        Assert.Null(requestRetriever());
+var builder = new MockedHttpClientBuilder();
+var capture = builder.WhenGet("/test").Respond(HttpStatusCode.OK).Capture();
+using var httpClient = builder.Build("http://localhost:1122");
+// no request being sent yet
+Assert.Null(capture());
 
-        // when send the request
-        var response = await httpClient.GetAsync("http://localhost:1122/test1");
+// when send the request
+var response = await httpClient.GetAsync("http://localhost:1122/test1");
 
-        // should get the request by retriever
-        var actualRequest = requestRetriever();
-        Assert.NotNull(actualRequest);
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);                    
-        Assert.Equal("GET", actualRequest.Method);
-        Assert.Equal("http://localhost:1122/test", actualRequest.RequestUri.ToString());
-    }
-}
+// should get the request by retriever
+var requestCapture = capture();
+Assert.NotNull(requestCapture);
+Assert.Equal(HttpStatusCode.OK, response.StatusCode);                    
+Assert.Equal("GET", requestCapture.Method);
+Assert.Equal("http://localhost:1122/test", requestCapture.RequestUri.ToString());
 ```
 
 ### Hamcrest Style Matchers
@@ -79,23 +56,21 @@ using (builder.Build("http://localhost:1122"))
 * **Matchers.Regex**
 
 ```cs
- var serverBuilder = new MockedHttpServerBuilder();
- serverBuilder
+ var serverBuilder = new MockedHttpClientBuilder();
+ builder
      .WhenGet(Matchers.Regex(@"/(staff)|(user)s"))
      .Respond(HttpStatusCode.InternalServerError);
 
- using (serverBuilder.Build(BaseAddress))
- {
-     var response = Get("http://localhost/users"));
-     Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
- }
+using var httpClient = builder.Build("http://localhost:1122");
+var response = await httpClient.GetAsync("http://localhost:1122/users");
 
+Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
 ```
 
 * **Matchers.WildCard**
 
 ```cs	
-serverBuilder
+builder
     .WhenGet(Matchers.Wildcard(@"/staffs/?"))
     .Respond(HttpStatusCode.Unauthorized);
 ```
@@ -103,7 +78,7 @@ serverBuilder
 * **Matchers.Is**
 
 ```cs
-serverBuilder
+builder
      .WhenGet(Matchers.Is("/staffs"))
      .Respond(HttpStatusCode.OK);
 ```
@@ -112,7 +87,7 @@ serverBuilder
 ### Other Matchers
 
 ```cs	
-serverBuilder
+builder
     .When(Matchers.Wildcard(@"/staffs/?"), HttpMethod.Patch)
     .Respond(HttpStatusCode.Unauthorized);
 ```

@@ -3,13 +3,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 
-namespace SimpleHttpMock
+namespace HttpClientMock
 {
     internal class RequestBehaviors
     {
         private readonly RequestBehavior[] behaviors;
-
-        public IEnumerable<RequestBehavior> Behaviors => behaviors;
 
         public RequestBehaviors(IEnumerable<RequestBehavior> behaviors)
         {
@@ -19,12 +17,11 @@ namespace SimpleHttpMock
         public HttpResponseMessage CreateResponse(HttpRequestMessage request)
         {
             var httpRequestMessageWrapper = new HttpRequestMessageWrapper(request);
-            var requestBehavior = Behaviors.Reverse().FirstOrDefault(behavior => behavior.Process(httpRequestMessageWrapper));
+            var requestBehavior = behaviors.Reverse().FirstOrDefault(behavior => behavior.Process(httpRequestMessageWrapper));
 
             if (requestBehavior != null)
                 return requestBehavior.CreateResponseMessage(request);
-            return request.CreateResponse(HttpStatusCode.NotFound);
+            return new HttpResponseMessage(HttpStatusCode.NotFound);
         }
     }
-
 }

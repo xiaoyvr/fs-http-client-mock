@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Http;
 
-namespace SimpleHttpMock.responses
+namespace HttpClientMock.Responses
 {
     public interface IResponseCreator
     {

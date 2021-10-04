@@ -1,42 +1,52 @@
-// include Fake lib
-#r @"packages/FAKE/tools/FakeLib.dll"
-open Fake
-open Fake.Testing
+#r "paket:
+nuget FSharp.Core 5 
+nuget Fake.DotNet.Cli
+nuget Fake.IO.FileSystem
+nuget Fake.Core.Target
+nuget Fake.Core.Trace
+nuget Fake.DotNet.Testing.XUnit2 //"
+#load ".fake/build.fsx/intellisense.fsx"
 
-let xunitrunner = "packages/xunit.runners/tools/xunit.console.clr4.exe"
+open Fake.Core
+open Fake.DotNet
+open Fake.DotNet.Testing
+open Fake.IO
+open Fake.IO.FileSystemOperators
+open Fake.IO.Globbing.Operators
+open Fake.Core.TargetOperators
 
-Target "Clean" (fun _ ->
+let buildDir = "./build/"
+
+Target.create "Clean" (fun _ ->
     !! "./src/**/bin/"
         ++ "./src/**/obj/"
         ++ "./test/**/bin/"
         ++ "./test/**/obj/"
-        |> CleanDirs
+        |> Shell.cleanDirs
 )
 
 // Default Target
-Target "Default" (fun _ -> 
-    trace "Hello World from FAKE"
+Target.create "Default" (fun _ -> 
+    Trace.trace "Hello World from FAKE"
 )
 
-Target "Build" (fun _ -> 
+
+Target.create "Build" (fun _ -> 
     !! "./src/**/*.csproj"
     ++ "./test/**/*.csproj"
-        |> MSBuildRelease "" "Build"
-        |> Log "AppBuild-Output: "
+    |> Seq.iter (DotNet.build id)
 )
 
-Target "Test" (fun _ ->
+Target.create "Test" (fun _ ->
     !! "./test/**/bin/**/test.dll"
-        |> xUnit (fun p -> 
+        |> XUnit2.run (fun p -> 
         {p with
-            HtmlOutputPath = Some("./tmp/TestOutput/" @@ "html");
-            ToolPath = xunitrunner })
+            HtmlOutputPath = Some("./tmp/TestOutput/" @@ "html") })
 )
+
 
 "Clean"
-    ==> "Build"
-    ==> "Test"
-    ==> "Default"
+  ==> "Build"
+  ==> "Test"
 
-// start build
-RunTargetOrDefault "Default"
+Target.runOrDefault "Default"

@@ -1,7 +1,5 @@
 source https://api.nuget.org/v3/index.json
 
-nuget FAKE
-nuget Microsoft.AspNetCore 2.2.0 strategy: min
 nuget Microsoft.NET.Test.Sdk
 nuget System.Net.Http.Json
 nuget xunit

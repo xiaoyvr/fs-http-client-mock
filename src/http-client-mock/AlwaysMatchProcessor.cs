@@ -1,4 +1,4 @@
-﻿﻿ namespace HttpClientMock
+﻿namespace HttpClientMock
 {
     internal class AlwaysMatchProcessor : RequestProcessorBase
     {

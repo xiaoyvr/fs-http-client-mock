@@ -3,7 +3,7 @@ using System.Net.Http;
 
 namespace HttpClientMock.Responses
 {
-    public interface IResponseCreator
+    internal interface IResponseCreator
     {
         HttpResponseMessage CreateResponseFor(HttpRequestMessage request, HttpStatusCode statusCode);
     }

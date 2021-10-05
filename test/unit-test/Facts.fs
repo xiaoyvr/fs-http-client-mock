@@ -263,5 +263,5 @@ let should_be_able_to_match_the_last_mocked_request() =
     
     let response = httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, "http://localhost:1122/multi-time-to-mock")).Result;
     let actualRequest2 = secondRequestRetriever.Invoke()
-    Assert.NotNull(actualRequest2);
-    Assert.NotNull(response);
+    Assert.NotNull(actualRequest2)
+    Assert.NotNull(response)

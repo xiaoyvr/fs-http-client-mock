@@ -4,7 +4,7 @@
     <RootNamespace>UnitTest</RootNamespace>
     <IsPackable>false</IsPackable>
     <GenerateProgramFile>false</GenerateProgramFile>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AssemblyName>UnitTest</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
@@ -12,7 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="UriMatchFacts.fs" />
-    <Compile Include="WildcardMatcherFacts.fs" />
+    <Compile Include="WildcardMatchFacts.fs" />
     <Compile Include="HarmcrestGrammarFacts.fs" />
     <Compile Include="StreamEntity.fs" />
     <Compile Include="Facts.fs" />

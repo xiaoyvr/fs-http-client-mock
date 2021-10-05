@@ -1,4 +1,4 @@
-module UnitTest.WildcardMatcherFacts
+module UnitTest.WildcardMatchFacts
 
 open System.Text.RegularExpressions
 open Xunit
@@ -7,17 +7,16 @@ open HttpClientMock
 
 [<Theory>]
 [<InlineData("pass", true)>]
-[<InlineData("Pass", false)>]
 [<InlineData("pas", false)>]
 [<InlineData("passw", true)>]
 [<InlineData("password", true)>]
-let ``should match star wild card``(s: string, expectedResult: bool) = 
-    WildCardMatcher("pass*").Match(s) |> should equal expectedResult 
+let ``should match star wild card``(s: string, expectedResult: bool) =
+    Matchers.Wildcard("pass*").Invoke(s) |> should equal expectedResult 
 
 
 [<Fact>]
 let ``should ignore case when set ignore case``() =
-    WildCardMatcher("pass*", RegexOptions.IgnoreCase).Match("Pass") |> should be True
+    Matchers.Wildcard("pass*").Invoke("Pass") |> should be True
 
 
 
@@ -27,6 +26,6 @@ let ``should ignore case when set ignore case``() =
 [<InlineData("passw", true)>]
 [<InlineData("password", false)>]
 let ``should_match_quesiton_mark_as_single_character`` (s: string, expectedResult: bool) =
-    WildCardMatcher("pass?").Match(s) |> should equal expectedResult
+    Matchers.Wildcard("pass?").Invoke(s) |> should equal expectedResult
             
   

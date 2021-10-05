@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 
 namespace HttpClientMock.Responses
 {
-    public class ObjectResponseCreator : IResponseCreator
+    internal class ObjectResponseCreator : IResponseCreator
     {
         private readonly object content;
 

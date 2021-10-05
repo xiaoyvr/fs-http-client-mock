@@ -30,7 +30,9 @@ namespace HttpClientMock
 
         public static Func<string, bool> Wildcard(string wildCardPattern)
         {
-            return s => new WildCardMatcher(wildCardPattern, RegexOptions.IgnoreCase).Match(s);
+            return s => new Regex($"^{System.Text.RegularExpressions.Regex.Escape(wildCardPattern)}$"
+                .Replace("\\*", ".*")
+                .Replace("\\?","."), RegexOptions.IgnoreCase).Match(s).Success;
         }
     }
 }

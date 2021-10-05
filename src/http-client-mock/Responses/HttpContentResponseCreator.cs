@@ -4,7 +4,7 @@ using System.Net.Http;
 
 namespace HttpClientMock.Responses
 {
-    public class HttpContentResponseCreator : IResponseCreator
+    internal class HttpContentResponseCreator : IResponseCreator
     {
         private readonly Func<HttpRequestMessage, HttpContent> contentFn;
 

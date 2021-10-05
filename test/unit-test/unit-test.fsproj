@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp5.0</TargetFramework>
+    <RootNamespace>UnitTest</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <GenerateProgramFile>false</GenerateProgramFile>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>UnitTest</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\http-client-mock\http-client-mock.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="UriMatchFacts.fs" />
+    <Compile Include="WildcardMatcherFacts.fs" />
+    <Compile Include="HarmcrestGrammarFacts.fs" />
+    <Compile Include="StreamEntity.fs" />
+    <Compile Include="Facts.fs" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

@@ -39,5 +39,4 @@
             return Content.ReadFromJsonAsync<T>().Result;
         }
     }
-
 }

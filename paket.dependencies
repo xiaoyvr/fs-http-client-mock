@@ -1,5 +1,8 @@
 source https://api.nuget.org/v3/index.json
 
+nuget FSharp.Core
+nuget FsUnit.xUnit
+nuget Microsoft.AspNetCore.TestHost 3.1.19
 nuget Microsoft.NET.Test.Sdk
 nuget System.Net.Http.Json
 nuget xunit

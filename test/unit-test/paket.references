@@ -1,4 +1,6 @@
+FSharp.Core
+FsUnit.xUnit
 xunit
-Microsoft.NET.Test.Sdk
 xunit.runner.visualstudio
 System.Net.Http.Json
+Microsoft.NET.Test.Sdk

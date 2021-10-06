@@ -3,118 +3,124 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using HttpClientMock.Responses;
+using System.Net.Http.Json;
+using JetBrains.Annotations;
 
 namespace HttpClientMock
 {
     public class RequestBehaviorBuilder
     {
         private readonly Func<string, bool> urlMatcher;
-
         private readonly HttpMethod method;
 
         private HttpStatusCode statusCode;
-
-        private IRequestProcessor processor;
-
         private IDictionary<string, string> headers;
+        private Uri location;
+        private Func<HttpRequestMessage, HttpContent> createContent;
+        private readonly List<RequestCapture> captures = new List<RequestCapture>();
+        private Func<HttpRequestMessage, bool> matcher;
 
         public RequestBehaviorBuilder(Func<string, bool> urlMatcher, HttpMethod method)
         {
             this.method = method;
             this.urlMatcher = urlMatcher;
+            createContent = r => JsonContent.Create(string.Empty);
+            matcher = r => MatchRespond.Match<object>(r, urlMatcher, method, (capture, model) => true, captures);
         }
 
-        public RequestBehaviorBuilder MatchRequest<TModel>(TModel schema = default, Func<RequestCapture, TModel, bool> matchFunc = null)
+        [PublicAPI]
+        public RequestBehaviorBuilder MatchRequest<TR>(TR schema = default, Func<RequestCapture, TR, bool> matchFunc = null)
         {
-            processor = new RequestProcessor<TModel>(matchFunc ?? ((r,t) => true));
-            return this;
+            return MatchRequest(matchFunc);
         }
         
+        [PublicAPI]
         public RequestBehaviorBuilder MatchRequest(Func<RequestCapture, object, bool> matchFunc = null)
         {
             return MatchRequest<object>(matchFunc);
         }
-
-        public RequestBehaviorBuilder MatchRequest<TModel>(Func<RequestCapture, TModel, bool> matchFunc = null)
+        
+        [PublicAPI]
+        public RequestBehaviorBuilder MatchRequest<TR>(Func<RequestCapture, TR, bool> matchFunc = null)
         {
-            processor = new RequestProcessor<TModel>(matchFunc ?? ((r,t) => true));
+            matcher = r => MatchRespond.Match(r, urlMatcher, method, matchFunc?? ((capture, model) =>true) , captures);
             return this;
         }
         
+        [PublicAPI]
         public Func<RequestCapture> Capture()
         {
-            processor ??= new AlwaysMatchProcessor();
-            return () => processor.Captures.LastOrDefault();
+            return () => captures.LastOrDefault();
         }
         
-        public Func<(RequestCapture requestCapture, TBody body)> Capture<TBody>(TBody schema = default)
+        [PublicAPI]
+        public Func<(RequestCapture requestCapture, TR model)> Capture<TR>(TR schema = default)
         {
-            processor ??= new AlwaysMatchProcessor();
             return () =>
             {
-                var requestCapture = processor.Captures.LastOrDefault();
-                TBody body = default;
+                var requestCapture = captures.LastOrDefault();
+                TR model = default;
                 if (requestCapture != null)
                 {
-                    body = requestCapture.Body<TBody>();
+                    model = requestCapture.Model<TR>();
                 }
-                return (requestCapture, body);
+                return (requestCapture, model);
             };
         }
 
+        [PublicAPI]
         public Func<IEnumerable<RequestCapture>> CaptureAll()
         {
-            processor ??= new AlwaysMatchProcessor();
-            return () => processor.Captures.ToArray();
+            return () => captures.ToArray();
         }
         
-        public Func<IEnumerable<(RequestCapture requestCapture, T body)>> CaptureAll<T>(T schema = default)
+        [PublicAPI]
+        public Func<IEnumerable<(RequestCapture requestCapture, TR model)>> CaptureAll<TR>(TR schema = default)
         {
-            processor ??= new AlwaysMatchProcessor();
-            return () => processor.Captures.Select(c => (c, c.Body<T>())).ToArray();
+            return () => captures.Select(c => (c, c.Model<TR>())).ToArray();
         }
-
+        
+        [PublicAPI]
         public RequestBehaviorBuilder Respond(HttpStatusCode httpStatusCode)
         {
             statusCode = httpStatusCode;
             return this;
         }
-
-        public RequestBehaviorBuilder Respond(HttpStatusCode httpStatusCode, object response, Uri location = null)
+        [PublicAPI]
+        public RequestBehaviorBuilder Respond(HttpStatusCode httpStatusCode, object content, Uri location = null)
         {
             statusCode = httpStatusCode;
-            this.response = new ObjectResponseCreator(response);
+            createContent = r => JsonContent.Create(content);
             this.location = location;
             return this;
         }
-
+        [PublicAPI]
         public RequestBehaviorBuilder RespondContent(HttpStatusCode httpStatusCode, Func<HttpRequestMessage,HttpContent> contentFn, Uri location = null)
         {
             statusCode = httpStatusCode;
-            response = new HttpContentResponseCreator(contentFn);
+            createContent = contentFn;
             this.location = location;
             return this;
         }
-
+        [PublicAPI]
         public RequestBehaviorBuilder RespondHeaders(dynamic headers)
         {
             this.headers = Dyn2Dict((object)headers);
             return this;
         }
-
-        private IResponseCreator response = new ObjectResponseCreator(string.Empty);
-
-        private Uri location;
-
-        internal RequestBehavior Build()
+        
+        internal (Func<HttpRequestMessage, bool> Matcher, Func<HttpRequestMessage, HttpResponseMessage> Responder) Build()
         {
-            return new RequestBehavior(statusCode, urlMatcher, method, processor ?? new AlwaysMatchProcessor(), response, location, headers);
+            return (
+                Matcher: r => matcher(r),
+                Responder: r => MatchRespond.Respond(r, createContent, statusCode, headers, location)
+            );
         }
 
-        private Dictionary<string, string> Dyn2Dict(object dynObj)
+        private static Dictionary<string, string> Dyn2Dict(object dynObj)
         {
-            return dynObj.GetType().GetProperties().ToDictionary(prop => prop.Name, prop => prop.GetValue(dynObj, null).ToString());
+            return dynObj.GetType().GetProperties().ToDictionary(prop => prop.Name, 
+                prop => prop.GetValue(dynObj, null).ToString());
         }
     }
 }

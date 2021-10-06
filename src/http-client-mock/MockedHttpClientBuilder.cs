@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using JetBrains.Annotations;
 
 namespace HttpClientMock
 {
@@ -9,22 +10,22 @@ namespace HttpClientMock
     {
         private readonly List<RequestBehaviorBuilder> builders = new List<RequestBehaviorBuilder>();
 
+        [PublicAPI]
         public HttpClient Build(string baseAddress)
         {
-            var requestBehaviors = new RequestBehaviors(builders.Select(b => b.Build()));
-            var handler = new MockHandler(requestBehaviors);
+            var handler = new MockHandler(builders.Select(b => b.Build()).ToArray());
             return new HttpClient(handler)
             {
                 BaseAddress = new Uri(baseAddress)
             };
         }
 
-
         public RequestBehaviorBuilder WhenGet(string uri)
         {
-            return WhenGet(Matchers.Is(uri));
+            return WhenGet(UrlMatchers.Is(uri));
         }
 
+        [PublicAPI]
         public RequestBehaviorBuilder WhenGet(Func<string, bool> urlMatcher)
         {
             return CreateRequestBehaviorBuilder(urlMatcher, HttpMethod.Get);
@@ -32,9 +33,10 @@ namespace HttpClientMock
 
         public RequestBehaviorBuilder WhenPost(string uri)
         {
-            return WhenPost(Matchers.Is(uri));
+            return WhenPost(UrlMatchers.Is(uri));
         }
 
+        [PublicAPI]
         public RequestBehaviorBuilder WhenPost(Func<string, bool> urlMatcher)
         {
             return CreateRequestBehaviorBuilder(urlMatcher, HttpMethod.Post);
@@ -42,9 +44,10 @@ namespace HttpClientMock
 
         public RequestBehaviorBuilder WhenPut(string uri)
         {
-            return WhenPut(Matchers.Is(uri));
+            return WhenPut(UrlMatchers.Is(uri));
         }
 
+        [PublicAPI]
         public RequestBehaviorBuilder WhenPut(Func<string, bool> urlMatcher)
         {
             return CreateRequestBehaviorBuilder(urlMatcher, HttpMethod.Put);
@@ -52,14 +55,16 @@ namespace HttpClientMock
 
         public RequestBehaviorBuilder WhenDelete(string uri)
         {
-            return WhenDelete(Matchers.Is(uri));
+            return WhenDelete(UrlMatchers.Is(uri));
         }
 
+        [PublicAPI]
         public RequestBehaviorBuilder WhenDelete(Func<string, bool> urlMatcher)
         {
             return CreateRequestBehaviorBuilder(urlMatcher, HttpMethod.Delete);
         }
 
+        [PublicAPI]
         public RequestBehaviorBuilder When(Func<string, bool> urlMatcher, HttpMethod httpMethod)
         {
             return CreateRequestBehaviorBuilder(urlMatcher, httpMethod);

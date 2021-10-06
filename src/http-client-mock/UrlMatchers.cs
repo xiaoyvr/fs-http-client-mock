@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 
 namespace HttpClientMock
 {
-    public static class Matchers
+    public static class UrlMatchers
     {
+        [PublicAPI]
         public static Func<string, bool> Regex(string regexPattern)
         {
             return url =>
@@ -14,6 +16,7 @@ namespace HttpClientMock
                 };
         }
 
+        [PublicAPI]
         public static Func<string, bool> Is(string urlPattern)
         {
             return
@@ -28,6 +31,7 @@ namespace HttpClientMock
                 };
         }
 
+        [PublicAPI]
         public static Func<string, bool> Wildcard(string wildCardPattern)
         {
             return s => new Regex($"^{System.Text.RegularExpressions.Regex.Escape(wildCardPattern)}$"

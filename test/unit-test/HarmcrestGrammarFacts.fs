@@ -6,6 +6,7 @@ open System.Net.Http.Json
 open HttpClientMock
 open Xunit
 open FsUnit.Xunit
+open type UrlMatchers
 
 let BaseAddress = "http://localhost:1122"
 let RequestUri = "http://localhost:1122/staff?employeeId=Staff0001"
@@ -18,7 +19,7 @@ let should_support_is_regex(url: string, expectedStatusCode: HttpStatusCode) =
         
     let serverBuilder = MockedHttpClientBuilder()
     serverBuilder
-        .WhenGet(Matchers.Regex(@"/(staff)|(user)s"))
+        .WhenGet(Regex(@"/(staff)|(user)s"))
         .Respond(HttpStatusCode.InternalServerError) |> ignore
         
     use httpClient = serverBuilder.Build(BaseAddress)
@@ -31,7 +32,7 @@ let should_support_is_regex(url: string, expectedStatusCode: HttpStatusCode) =
 let should_support_head_request() =
     let serverBuilder = MockedHttpClientBuilder();
     serverBuilder
-        .When(Matchers.Regex(@"/staffs"), HttpMethod.Head)
+        .When(Regex(@"/staffs"), HttpMethod.Head)
         .Respond(HttpStatusCode.InternalServerError) |> ignore
 
     use httpClient = serverBuilder.Build(BaseAddress);
@@ -43,7 +44,7 @@ let should_support_head_request() =
 let should_support_is_regex_for_post() =
     let serverBuilder = MockedHttpClientBuilder();
     serverBuilder
-        .WhenPost(Matchers.Regex(@"/staffs"))
+        .WhenPost(Regex(@"/staffs"))
         .Respond(HttpStatusCode.InternalServerError) |> ignore
 
     use httpClient = serverBuilder.Build(BaseAddress);
@@ -58,7 +59,7 @@ let should_support_it_is_star_wildcard() =
 
     let serverBuilder = MockedHttpClientBuilder();
     serverBuilder
-        .WhenGet(Matchers.Wildcard(@"/staff*"))
+        .WhenGet(Wildcard(@"/staff*"))
         .Respond(HttpStatusCode.InternalServerError) |> ignore
 
     use httpClient = serverBuilder.Build(BaseAddress);
@@ -71,7 +72,7 @@ let should_support_it_is_question_mark_wildcard() =
 
     let serverBuilder = MockedHttpClientBuilder();
     serverBuilder
-        .WhenGet(Matchers.Wildcard(@"/staffs/?"))
+        .WhenGet(Wildcard(@"/staffs/?"))
         .Respond(HttpStatusCode.InternalServerError) |> ignore
 
     use httpClient = serverBuilder.Build(BaseAddress)
@@ -83,7 +84,7 @@ let should_support_it_is_question_mark_wildcard() =
 let should_support_it_is() =
     let serverBuilder = MockedHttpClientBuilder();
     serverBuilder
-        .WhenGet(Matchers.Is("/staff?employeeId=Staff0001"))
+        .WhenGet(Is("/staff?employeeId=Staff0001"))
         .Respond(HttpStatusCode.InternalServerError) |> ignore
 
     use httpClient = serverBuilder.Build(BaseAddress);

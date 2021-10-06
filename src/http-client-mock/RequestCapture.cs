@@ -2,41 +2,59 @@
  using System.IO;
  using System.Net.Http;
  using System.Net.Http.Json;
- using System.Text.Json;
+using JetBrains.Annotations;
 
- namespace HttpClientMock
+namespace HttpClientMock
 {
     public class RequestCapture
     {
-        public string Method { get; set; }
-        public HttpContent Content { private get; set; }
-        public Uri RequestUri { get; set; }
-
-        public T Body<T>(T schema = default)
+        private readonly HttpContent content;
+        public RequestCapture(Uri requestUri, HttpMethod method, HttpContent content)
         {
-            return Read<T>();
+            Method = method;
+            this.content = content;
+            RequestUri = requestUri;
         }
         
-        private T Read<T>()
+        [PublicAPI]
+        public HttpMethod Method { get; }
+        [PublicAPI]
+        public Uri RequestUri { get; }
+
+        public T Model<T>(T schema = default)
         {
-            if (Content is EmptyContent)
-            {
-                return default;
-            }
-            
+            return content is EmptyContent ? 
+                default : Read<T>(Copy(content));
+        }
+        
+        private static T Read<T>(HttpContent content)
+        {
             if (typeof(T) == typeof(string))
             {
-                return (T) (object) Content.ReadAsStringAsync().Result;
+                return (T) (object) content.ReadAsStringAsync().Result;
             }
             if (typeof(T) == typeof(Stream))
             {
-                return (T) (object) Content.ReadAsStreamAsync().Result;
+                return (T) (object) content.ReadAsStreamAsync().Result;
             }
             if (typeof(T) == typeof(byte[]))
             {
-                return (T) (object) Content.ReadAsByteArrayAsync().Result;
+                return (T) (object) content.ReadAsByteArrayAsync().Result;
             }
-            return Content.ReadFromJsonAsync<T>().Result;
+            return content.ReadFromJsonAsync<T>().Result;
+        }
+
+        private static StreamContent Copy(HttpContent content)
+        {
+            var memoryStream = new MemoryStream();
+            content.CopyToAsync(memoryStream);
+            memoryStream.Position = 0;
+            var streamContent = new StreamContent(memoryStream);
+            foreach (var (key, value) in content.Headers)
+            {
+                streamContent.Headers.Add(key, value);    
+            }
+            return streamContent;
         }
     }
 }

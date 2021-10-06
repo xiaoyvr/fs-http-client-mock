@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using JetBrains.Annotations;
 
 namespace HttpClientMock
 {
@@ -13,9 +14,10 @@ namespace HttpClientMock
             this.content = content;
         }
 
+        [PublicAPI]
         public T Get<T>(string name)
         {
-            var x = this.content.FirstOrDefault(c => c.Headers.ContentDisposition.Name == name);
+            var x = content.First(c => c.Headers.ContentDisposition.Name == name);
             return x.ReadFromJsonAsync<T>().Result;
         }
     }

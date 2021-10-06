@@ -50,4 +50,4 @@ module Test =
         result |>  should equal "Bla"
          
         let requestCapture = capture()
-        requestCapture.Method |> should equal HttpMethod.Get.Method
+        requestCapture.Method |> should equal HttpMethod.Get

@@ -4,6 +4,6 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>HttpClientMock</RootNamespace>
     <AssemblyName>HttpClientMock</AssemblyName>
-  </PropertyGroup>
+    </PropertyGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

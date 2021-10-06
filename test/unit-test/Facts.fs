@@ -72,7 +72,7 @@ let should_read_string_as_request_body_for_unknown_content_type() =
 
     let response = httpClient.PostAsync("http://localhost:1122/streams/test", content).Result;
     Assert.Equal(HttpStatusCode.OK, response.StatusCode)    
-    Assert.NotNull(retrieve.Invoke().Body<Object>());
+    Assert.NotNull(retrieve.Invoke().Model<Object>());
 
 [<Fact>]
 let should_matches_url_when_it_is_absolute_uri() =
@@ -130,7 +130,7 @@ let should_be_able_to_valid_request() =
     let result = " a \"c\" b ";
     let requestBody = {| Field = "a"; Field2 = "b" |}
 
-    let retrieve = builder.WhenPost("/test")
+    let capture = builder.WhenPost("/test")
                        .RespondContent(HttpStatusCode.OK, fun r -> new StringContent(result):> HttpContent)
                        .Capture(requestBody)
 
@@ -145,7 +145,7 @@ let should_be_able_to_valid_request() =
     let request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:1122/test", Content = content)
     
     let response = httpClient.SendAsync(request).Result;
-    let _, body = retrieve.Invoke().ToTuple()
+    let _, body = capture.Invoke().ToTuple()
     
     Assert.Equal(result, response.Content.ReadAsStringAsync().Result); // raw string
     Assert.Equal("a", body.Field);
@@ -191,14 +191,14 @@ let should_be_able_to_retrieve_request() =
     let requestCapture = capture.Invoke()
     Assert.NotNull(requestCapture);
     Assert.Equal(HttpStatusCode.OK, response1.StatusCode);
-    Assert.Equal("GET", requestCapture.Method);
+    requestCapture.Method |> should equal HttpMethod.Get
     Assert.Equal("http://localhost:1122/test1", requestCapture.RequestUri.ToString())
 
     let _ = httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, "http://localhost:1122/test2")).Result
     let requestCapture2 = capture.Invoke()
     Assert.NotNull(requestCapture2)
     Assert.Equal("http://localhost:1122/test1", requestCapture2.RequestUri.ToString())
-    Assert.Equal(HttpStatusCode.NotFound, response.StatusCode)
+    response.StatusCode |> should equal HttpStatusCode.NotFound
 
 
 [<Fact>]
@@ -239,11 +239,11 @@ let should_be_able_to_match_and_retrieve_request() =
 [<Fact>]
 let should_be_able_to_process_string_as_json() =
     let builder = MockedHttpClientBuilder();
-    let retrieve = builder.WhenPut("/te$st").Respond(HttpStatusCode.OK, {||}).Capture();
+    let capture = builder.WhenPut("/te$st").Respond(HttpStatusCode.OK, {||}).Capture();
     use httpClient = builder.Build("http://localhost:1122");
-    let response = httpClient.PutAsJsonAsync("http://localhost:1122/te$st", "abc").Result;
-    Assert.Equal(HttpStatusCode.OK,response.StatusCode);
-    Assert.Equal("abc", retrieve.Invoke().Body<Object>().ToString());
+    let response = httpClient.PutAsJsonAsync("http://localhost:1122/te$st", "abc").Result
+    response.StatusCode |> should equal HttpStatusCode.OK
+    Assert.Equal("abc", capture.Invoke().Model<Object>().ToString())
 
 
 [<Fact>]

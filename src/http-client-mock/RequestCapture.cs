@@ -47,7 +47,7 @@ namespace HttpClientMock
         private static StreamContent Copy(HttpContent content)
         {
             var memoryStream = new MemoryStream();
-            content.CopyToAsync(memoryStream);
+            content.CopyToAsync(memoryStream).Wait();
             memoryStream.Position = 0;
             var streamContent = new StreamContent(memoryStream);
             foreach (var (key, value) in content.Headers)

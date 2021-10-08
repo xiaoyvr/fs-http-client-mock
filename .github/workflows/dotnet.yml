@@ -21,6 +21,7 @@ jobs:
       run: | 
         dotnet tool restore
         dotnet restore
+        ls .paket
     - name: Build
       run: dotnet build --no-restore
     - name: Test

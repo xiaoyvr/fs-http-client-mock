@@ -1,6 +1,9 @@
 HttpClientMock
 ==============
 
+![Build](https://github.com/xiaoyvr/http-client-mock/actions/workflows/dotnet.yml/badge.svg)
+
+
 A really simple http client mock.
 
 ### Match by simple url

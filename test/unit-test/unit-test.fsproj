@@ -8,7 +8,7 @@
     <AssemblyName>UnitTest</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\http-client-mock\http-client-mock.fsproj" />
+    <ProjectReference Include="..\..\src\fs-http-client-mock\fs-http-client-mock.fsproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="UriMatchFacts.fs" />

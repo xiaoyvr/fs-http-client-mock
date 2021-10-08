@@ -8,7 +8,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "unit-test", "test\unit-test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csharp-test", "test\csharp-test\csharp-test.csproj", "{CCE5F2EA-2E5C-4755-A10F-FAF56F12D791}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "http-client-mock", "src\http-client-mock\http-client-mock.fsproj", "{24DFEF58-A3D9-4789-9960-D93BEA9C3899}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "fs-http-client-mock", "src\fs-http-client-mock\fs-http-client-mock.fsproj", "{24DFEF58-A3D9-4789-9960-D93BEA9C3899}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,18 +1,16 @@
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using HttpClientMock;
 using Xunit;
 
-
 namespace csharp_test
 {
-    public class UnitTest1
+    public class SyntaxSpike
     {
         [Fact]
-        public async void Test1()
+        public async void TestSyntax()
         {
             var builder = new MockedHttpClientBuilder();
             var capture = builder
@@ -26,7 +24,6 @@ namespace csharp_test
             
             using var httpClient = builder.Build("http://localhost:1344");
             
-
             var response = await httpClient.PostAsJsonAsync("http://localhost:1344/some", new {name = "john"});
             
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);

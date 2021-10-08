@@ -6,7 +6,7 @@ open System.Net.Http.Json
 open HttpClientMock
 open Xunit
 open FsUnit.Xunit
-open type UrlMatchers
+open HttpClientMock.UrlMatchers
 
 let BaseAddress = "http://localhost:1122"
 let RequestUri = "http://localhost:1122/staff?employeeId=Staff0001"

@@ -1,4 +1,4 @@
-﻿namespace HttpClientMockx
+﻿namespace HttpClientMock
 
 open System
 open System.Net.Http
@@ -8,10 +8,9 @@ type MockedHttpClientBuilder() =
     
     let mutable builders: RequestBehaviorBuilder list = List.empty
     
-    let CreateRequestBehaviorBuilder( urlMatcher: string -> bool, httpMethod: HttpMethod) =
-        let builder = RequestBehaviorBuilder(urlMatcher, httpMethod);
-        builders <- builders @ [builder];
-        builder
+    let CreateRequestBehaviorBuilder(urlMatcher: Func<string, bool>, httpMethod: HttpMethod) =
+        RequestBehaviorBuilder(FuncConvert.FromFunc(urlMatcher), httpMethod)
+            |> fun b -> builders <- builders @ [b]; b
     
     [<PublicAPI>]
     member this.Build(baseAddress: string) =
@@ -19,16 +18,16 @@ type MockedHttpClientBuilder() =
             |> fun h -> new HttpClient(h, BaseAddress = Uri(baseAddress))
 
     [<PublicAPI>]
-    member this.WhenGet(urlMatcher: string -> bool) =
+    member this.WhenGet(urlMatcher: Func<string, bool>) =
         CreateRequestBehaviorBuilder(urlMatcher, HttpMethod.Get);
 
     [<PublicAPI>]            
-    member this.WhenGet(uri: string) =
-        this.WhenGet(UrlMatchers.Is(uri));
+    member this.WhenGet(url: string) =
+        this.WhenGet(UrlMatchers.Is(url));
         
         
     [<PublicAPI>]
-    member this.WhenPost(urlMatcher: string -> bool) =
+    member this.WhenPost(urlMatcher: Func<string, bool>) =
         CreateRequestBehaviorBuilder(urlMatcher, HttpMethod.Post)
     
     [<PublicAPI>]
@@ -36,7 +35,7 @@ type MockedHttpClientBuilder() =
         this.WhenPost(UrlMatchers.Is(uri))
 
     [<PublicAPI>]
-    member this.WhenPut(urlMatcher: string -> bool) =
+    member this.WhenPut(urlMatcher: Func<string, bool>) =
         CreateRequestBehaviorBuilder(urlMatcher, HttpMethod.Put)
         
     [<PublicAPI>]
@@ -44,7 +43,7 @@ type MockedHttpClientBuilder() =
         this.WhenPut(UrlMatchers.Is(url))
 
     [<PublicAPI>]
-    member this.WhenDelete(urlMatcher: string -> bool) =
+    member this.WhenDelete(urlMatcher: Func<string, bool>) =
         CreateRequestBehaviorBuilder(urlMatcher, HttpMethod.Delete)
         
     [<PublicAPI>]
@@ -52,6 +51,6 @@ type MockedHttpClientBuilder() =
         this.WhenDelete(UrlMatchers.Is(url))
     
     [<PublicAPI>]
-    member this.When(urlMatcher: string -> bool,  httpMethod: HttpMethod) =
+    member this.When(urlMatcher: Func<string, bool>,  httpMethod: HttpMethod) =
         CreateRequestBehaviorBuilder(urlMatcher, httpMethod);
     

@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\http-client-mock\http-client-mock.csproj" />
+    <ProjectReference Include="..\..\src\http-client-mock\http-client-mock.fsproj" />
     <ProjectReference Include="..\weather-app\weather-app.fsproj" />
   </ItemGroup>
 

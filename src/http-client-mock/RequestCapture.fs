@@ -1,4 +1,4 @@
-﻿namespace HttpClientMockx
+﻿namespace HttpClientMock
 
 open System;
 open System.IO;
@@ -22,16 +22,13 @@ type RequestCapture (requestUri: Uri ,  method: HttpMethod,  content: HttpConten
             | _ -> content.ReadFromJsonAsync<'T>().Result
             
     static member Copy(content: HttpContent ): StreamContent =
-        let memoryStream = new MemoryStream()
-        content.CopyToAsync(memoryStream).Wait()
-//        async { do! content.CopyToAsync(memoryStream) |> Async.AwaitTask } |> Async.RunSynchronously
-
-        memoryStream.Position <- 0L
-        let streamContent = new StreamContent(memoryStream);
-        for header in content.Headers do
-            streamContent.Headers.Add(header.Key, header.Value)
-        streamContent
-    
+        new MemoryStream()
+            |> fun m -> content.CopyToAsync(m).Wait(); m
+            |> fun m -> m.Position <- 0L; m
+            |> fun m -> new StreamContent(m)
+            |> fun c -> content.Headers |> Seq.iter (fun h -> c.Headers.Add(h.Key, h.Value));c
+            
+    [<PublicAPI>]
     member this.Model<'T>(): 'T option =
         match content with
             | None -> None

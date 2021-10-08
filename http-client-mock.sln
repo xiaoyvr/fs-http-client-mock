@@ -1,12 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "http-client-mock", "src\http-client-mock\http-client-mock.csproj", "{411F1726-C7FF-440F-BB91-0528C6FF9BA9}"
-EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "weather-app", "test\weather-app\weather-app.fsproj", "{2F1F671F-951D-4583-80E7-98FD81006259}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "weather-app-test", "test\weather-app-test\weather-app-test.fsproj", "{E314A9F0-BEF6-4882-A3C4-F67721F808B1}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "unit-test", "test\unit-test\unit-test.fsproj", "{36E98929-586F-4C7B-A44E-E69105BB5DF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csharp-test", "test\csharp-test\csharp-test.csproj", "{CCE5F2EA-2E5C-4755-A10F-FAF56F12D791}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "http-client-mock", "src\http-client-mock\http-client-mock.fsproj", "{24DFEF58-A3D9-4789-9960-D93BEA9C3899}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,10 +16,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{411F1726-C7FF-440F-BB91-0528C6FF9BA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{411F1726-C7FF-440F-BB91-0528C6FF9BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{411F1726-C7FF-440F-BB91-0528C6FF9BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{411F1726-C7FF-440F-BB91-0528C6FF9BA9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2F1F671F-951D-4583-80E7-98FD81006259}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2F1F671F-951D-4583-80E7-98FD81006259}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F1F671F-951D-4583-80E7-98FD81006259}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -30,5 +28,13 @@ Global
 		{36E98929-586F-4C7B-A44E-E69105BB5DF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36E98929-586F-4C7B-A44E-E69105BB5DF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36E98929-586F-4C7B-A44E-E69105BB5DF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCE5F2EA-2E5C-4755-A10F-FAF56F12D791}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCE5F2EA-2E5C-4755-A10F-FAF56F12D791}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCE5F2EA-2E5C-4755-A10F-FAF56F12D791}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCE5F2EA-2E5C-4755-A10F-FAF56F12D791}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24DFEF58-A3D9-4789-9960-D93BEA9C3899}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24DFEF58-A3D9-4789-9960-D93BEA9C3899}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24DFEF58-A3D9-4789-9960-D93BEA9C3899}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24DFEF58-A3D9-4789-9960-D93BEA9C3899}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

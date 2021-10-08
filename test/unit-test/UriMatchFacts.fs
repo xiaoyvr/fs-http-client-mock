@@ -1,7 +1,6 @@
 ﻿namespace UnitTest
 
 open System.Net
-open HttpClientMock
 open Xunit
 open FsUnit.Xunit
 
@@ -9,7 +8,7 @@ module UriMatchFacts =
 
     [<Fact>]
     let ``should match url contains question mark``() =
-        let builder = MockedHttpClientBuilder()
+        let builder = HttpClientMock.MockedHttpClientBuilder()
         builder.WhenGet("/staff?employeeId=Staff0001")
             .Respond(HttpStatusCode.InternalServerError) |> ignore
         

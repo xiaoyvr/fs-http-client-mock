@@ -1,9 +1,8 @@
-module HttpClientMockx.MatchResponse
+module HttpClientMock.MatchResponse
 
 open System
 open System.Net
 open System.Net.Http
-open System.Net.Http.Headers
 
 let Respond( request: HttpRequestMessage, createContent: HttpRequestMessage -> HttpContent,
              statusCode: HttpStatusCode, headers: Map<string, string>,
@@ -15,16 +14,16 @@ let Respond( request: HttpRequestMessage, createContent: HttpRequestMessage -> H
             match location with
                 | Some(l) -> r.Headers.Location <- l
                 | None -> ()
-            r 
+            r
 
 let Match<'TR>(request: HttpRequestMessage, urlMatcher: string -> bool , method: HttpMethod,
-               matchFunc: RequestCapture -> 'TR option -> bool, captures: RequestCapture list  ) =
+               matchFunc: RequestCapture -> 'TR option -> bool) =
 
     match request with
-        | r when r.Method <> method -> false, captures
+        | r when r.Method <> method -> None
         | r when not (r.RequestUri.PathAndQuery |> urlMatcher)
                  && not ( r.RequestUri.PathAndQuery |> Uri.UnescapeDataString |> urlMatcher) ->
-            false, captures
+            None
         | r ->
             let content = match r.Content with
                             | null -> None
@@ -33,5 +32,5 @@ let Match<'TR>(request: HttpRequestMessage, urlMatcher: string -> bool , method:
             let capture = RequestCapture(r.RequestUri, r.Method, content)
             let model = capture.Model<'TR>()
             match matchFunc capture model with
-                | true -> true, captures @ [capture]
-                | false -> false, captures            
+                | true -> Some(capture)
+                | false -> None            

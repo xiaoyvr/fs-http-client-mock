@@ -1,9 +1,8 @@
 module UnitTest.WildcardMatchFacts
 
-open System.Text.RegularExpressions
 open Xunit
 open FsUnit.Xunit
-open type HttpClientMock.UrlMatchers
+open HttpClientMock.UrlMatchers
 
 [<Theory>]
 [<InlineData("pass", true)>]

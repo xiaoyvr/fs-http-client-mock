@@ -8,16 +8,9 @@
     <AssemblyName>UnitTest</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\http-client-mock\http-client-mock.csproj" />
+    <ProjectReference Include="..\..\src\http-client-mock\http-client-mock.fsproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HttpClientMockx\RequestCapture.fs" />
-    <Compile Include="HttpClientMockx\MatchResponse.fs" />
-    <Compile Include="HttpClientMockx\MockHandler.fs" />
-    <Compile Include="HttpClientMockx\MultipartContentProvider.fs" />
-    <Compile Include="HttpClientMockx\RequestBehaviorBuilder.fs" />
-    <Compile Include="HttpClientMockx\UrlMatchers.fs" />
-    <Compile Include="HttpClientMockx\MockedHttpClientBuilder.fs" />
     <Compile Include="UriMatchFacts.fs" />
     <Compile Include="WildcardMatchFacts.fs" />
     <Compile Include="HarmcrestGrammarFacts.fs" />

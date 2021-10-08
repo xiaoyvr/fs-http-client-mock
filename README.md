@@ -59,7 +59,8 @@ public async void capture_request_being_sent()
     Assert.Equal(HttpStatusCode.OK, response.StatusCode);                    
     Assert.Equal(HttpMethod.Get, requestCapture.HttpMethod);
     Assert.Equal("http://localhost:1122/test", requestCapture.RequestUri.ToString());
-}```
+}
+```
 
 ### Hamcrest Style Matchers
 

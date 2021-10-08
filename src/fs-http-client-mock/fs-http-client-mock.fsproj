@@ -9,8 +9,9 @@
     <PackageId>FsHttpClientMock</PackageId>
     <Authors>FsHttpClientMock</Authors>
     <PackageProjectUrl>https://github.com/xiaoyvr/http-client-mock</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/xiaoyvr/http-client-mock/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/xiaoyvr/http-client-mock</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="FuncUtils.fs" />
@@ -21,6 +22,7 @@
     <Compile Include="RequestBehaviorBuilder.fs" />
     <Compile Include="UrlMatchers.fs" />
     <Compile Include="MockedHttpClientBuilder.fs" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

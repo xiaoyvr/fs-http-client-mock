@@ -8,6 +8,9 @@
     <AssemblyName>FsHttpClientMock</AssemblyName>
     <PackageId>FsHttpClientMock</PackageId>
     <Authors>FsHttpClientMock</Authors>
+    <PackageProjectUrl>https://github.com/xiaoyvr/http-client-mock</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/xiaoyvr/http-client-mock/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/xiaoyvr/http-client-mock</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="FuncUtils.fs" />

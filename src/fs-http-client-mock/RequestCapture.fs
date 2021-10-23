@@ -4,7 +4,6 @@ open System
 open System.IO
 open System.Net.Http
 open System.Net.Http.Json
-open JetBrains.Annotations
 
 module private RequestCapture =
     let Read<'T>(content: HttpContent): 'T =
@@ -22,13 +21,8 @@ module private RequestCapture =
             |> fun c -> content.Headers |> Seq.iter (fun h -> c.Headers.Add(h.Key, h.Value));c
 
 type RequestCapture internal (requestUri: Uri ,  method: HttpMethod,  content: HttpContent option) =
-    [<PublicAPI>]
     member this.HttpMethod = method
-    
-    [<PublicAPI>]
     member this.RequestUri = requestUri
-            
-    [<PublicAPI>]
     member this.Model<'T>(): 'T option =
         match content with
             | None -> None

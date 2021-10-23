@@ -3,12 +3,10 @@
 open System
 open System.Net
 open System.Net.Http
-open System.Net.Http.Json
 open System.Runtime.InteropServices
-open JetBrains.Annotations
 
 
-module MatcherResponder =
+module private MatcherResponder =
     let MatchUrl<'TR> (urlMatcher: string -> bool) (request: HttpRequestMessage)  =
         let p = request.RequestUri.PathAndQuery
         if (p |> urlMatcher) || (p |> Uri.UnescapeDataString |> urlMatcher) then
@@ -41,18 +39,15 @@ type MatcherResponder internal (matcher: HttpRequestMessage -> HttpRequestMessag
         responder
 
     /// this is only for csharp use since there's no type declaration for anonymous type
-    [<PublicAPI>]
     member this.MatchRequest<'TR>(matchFunc: Func<RequestCapture, 'TR, bool>, _: 'TR) =        
         this.MatchRequest<'TR>(matchFunc)
-            
-    [<PublicAPI>]
+
     member this.Respond(status: HttpStatusCode,
                         contentFn: Func<HttpRequestMessage, HttpContent>,
                         [<Optional>]?headers: struct(string*string) seq,
                         [<Optional>]?location: Uri) =        
         responder.Respond(status, contentFn, ?headers = headers, ?location = location)
         
-    [<PublicAPI>]
     member this.Respond(status: HttpStatusCode,
                         [<Optional>]?content: Object,
                         [<Optional>]?headers: struct(string*string) seq,

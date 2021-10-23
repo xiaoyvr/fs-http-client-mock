@@ -3,9 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>WeatherApp.Test</RootNamespace>
-
     <IsPackable>false</IsPackable>
-    <GenerateProgramFile>false</GenerateProgramFile>
+    <GenerateProgramFile>true</GenerateProgramFile>
     <OutputType>Library</OutputType>
     <AssemblyName>WeatherApp.Test</AssemblyName>
   </PropertyGroup>

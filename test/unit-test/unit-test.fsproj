@@ -3,7 +3,7 @@
     <TargetFramework>netcoreapp5.0</TargetFramework>
     <RootNamespace>UnitTest</RootNamespace>
     <IsPackable>false</IsPackable>
-    <GenerateProgramFile>false</GenerateProgramFile>
+    <GenerateProgramFile>true</GenerateProgramFile>
     <OutputType>Library</OutputType>
     <AssemblyName>UnitTest</AssemblyName>
   </PropertyGroup>

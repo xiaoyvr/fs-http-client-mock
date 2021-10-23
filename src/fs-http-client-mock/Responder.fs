@@ -6,7 +6,7 @@ open System.Net.Http
 open System.Net.Http.Json
 open System.Runtime.InteropServices
 
-module Responder =
+module private Responder =
     let Respond request (createContent: HttpRequestMessage -> HttpContent)
              statusCode (headers: Map<string, string>)
              (location: Uri option): HttpResponseMessage =

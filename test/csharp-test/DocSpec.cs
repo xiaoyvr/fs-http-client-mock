@@ -40,7 +40,9 @@ namespace csharp_test
         public async void capture_request_being_sent()
         {
             var builder = new MockedHttpClientBuilder();
-            var capture = builder.WhenGet("/test").Respond(HttpStatusCode.OK).Capture();
+            var capture = builder
+                .WhenGet("/test")
+                .Respond(HttpStatusCode.OK).Capture();
             using var httpClient = builder.Build("http://localhost:1122");
             // no request being sent yet
             Assert.Null(capture());

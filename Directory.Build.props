@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
 
     <Description>Testing symbols</Description>
     <RepositoryUrl>https://github.com/xiaoyvr/http-client-mock</RepositoryUrl>

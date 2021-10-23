@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>FsHttpClientMock</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <WarnOn>3390;$(WarnOn)</WarnOn>
@@ -12,14 +11,15 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/xiaoyvr/http-client-mock</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <TargetFrameworks>net5.0;netstandard2.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="FuncUtils.fs" />
     <Compile Include="RequestCapture.fs" />
-    <Compile Include="MatchResponse.fs" />
     <Compile Include="MockHandler.fs" />
     <Compile Include="MultipartContentProvider.fs" />
-    <Compile Include="RequestBehaviorBuilder.fs" />
+    <Compile Include="Responder.fs" />
+    <Compile Include="MatcherResponder.fs" />
     <Compile Include="UrlMatchers.fs" />
     <Compile Include="MockedHttpClientBuilder.fs" />
     <None Include="..\..\README.md" Pack="true" PackagePath="" />

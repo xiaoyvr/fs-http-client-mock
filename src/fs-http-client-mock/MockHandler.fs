@@ -5,15 +5,21 @@ open System.Net.Http
 open System.Threading.Tasks
 
 
-type Behavior = {Matcher: HttpRequestMessage -> bool; Responder: HttpRequestMessage -> HttpResponseMessage}
+type internal Behavior = {
+                           Match: HttpRequestMessage -> HttpRequestMessage option
+                           Respond: HttpRequestMessage -> HttpResponseMessage
+                           Capture: RequestCapture -> unit 
+                           }
 
-type MockHandler(behaviors: Behavior[]) =
+type internal MockHandler(behaviors: Behavior[]) =
     inherit DelegatingHandler()
     
     override this.SendAsync(request: HttpRequestMessage, _: System.Threading.CancellationToken) =
-        match behaviors |> Seq.tryFindBack(fun b -> b.Matcher(request)) with
+        match behaviors |> FuncUtils.tryFindMapBack(fun b -> b.Match(request)) with
                 | None -> new HttpResponseMessage(HttpStatusCode.NotFound)
-                | Some(b) -> b.Responder(request)
+                | Some(r, b) ->
+                    b.Capture(RequestCapture(r.RequestUri, r.Method, Option.ofObj r.Content))
+                    b.Respond(r)
             |> fun r -> if request.Method = HttpMethod.Head then r.Content <- null
                         r
             |> Task.FromResult

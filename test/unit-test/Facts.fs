@@ -227,9 +227,9 @@ let should_be_able_to_match_and_retrieve_request_for_anonymous_type() =
 let should_be_able_to_match_and_retrieve_request() =
     let builder = MockedHttpClientBuilder();
     let capture = builder.WhenGet("/te$st")
-                               .Respond(HttpStatusCode.OK)
-                               .MatchRequest(fun _ _ -> true)
-                               .Capture();
+                            .MatchRequest(fun _ _ -> true)
+                            .Respond(HttpStatusCode.OK)   
+                            .Capture();
     use httpClient = builder.Build("http://localhost:1122");
     let actualRequest = capture.Invoke()
     actualRequest |> should equal None

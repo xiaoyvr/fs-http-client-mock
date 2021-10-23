@@ -1,4 +1,4 @@
-HttpClientMock
+FsHttpClientMock
 ==============
 
 [![.NET](https://github.com/xiaoyvr/http-client-mock/actions/workflows/dotnet.yml/badge.svg)](https://github.com/xiaoyvr/http-client-mock/actions/workflows/dotnet.yml)

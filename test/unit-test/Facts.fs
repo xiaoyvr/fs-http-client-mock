@@ -247,7 +247,7 @@ let should_be_able_to_process_string_as_json() =
     use httpClient = builder.Build("http://localhost:1122");
     let response = httpClient.PutAsJsonAsync("http://localhost:1122/te$st", "abc").Result
     response.StatusCode |> should equal HttpStatusCode.OK
-    Assert.Equal("abc", capture.Invoke().Model<Object>().Value.ToString())
+    Assert.Equal("abc", capture.Invoke().Model<Object>().ToString())
 
 
 [<Fact>]

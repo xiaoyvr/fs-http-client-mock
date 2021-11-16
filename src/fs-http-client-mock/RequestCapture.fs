@@ -4,6 +4,7 @@ open System
 open System.IO
 open System.Net.Http
 open System.Net.Http.Json
+open System.Runtime.InteropServices
 
 module private RequestCapture =
     let Read<'T>(content: HttpContent): 'T =
@@ -20,13 +21,18 @@ module private RequestCapture =
             |> fun m -> new StreamContent(m)
             |> fun c -> content.Headers |> Seq.iter (fun h -> c.Headers.Add(h.Key, h.Value));c
 
+
 type RequestCapture internal (requestUri: Uri ,  method: HttpMethod,  content: HttpContent option) =
     member this.HttpMethod = method
     member this.RequestUri = requestUri
-    member this.Model<'T>(): 'T option =
-        match content with
-            | None -> None
-            | Some c -> Some(RequestCapture.Read<'T>(RequestCapture.Copy(c)))
+    member internal this.ToModel<'T>(): 'T option =
+        content |> Option.map
+                       (fun c -> RequestCapture.Read<'T>(RequestCapture.Copy(c)))
+    member this.Model<'T> ([<Optional>]schema:'T): 'T  =
+        match this.ToModel() with
+            | None -> Unchecked.defaultof<'T>
+            | Some v -> v
+                       
 type RequestCapturer internal () =
     let mutable captures: RequestCapture seq = Seq.empty
     member internal this.Intake c =
@@ -37,7 +43,7 @@ type RequestCapturer internal () =
     member this.Capture<'TR>() =
         fun () ->            
             match captures |> Seq.tryLast with
-                | Some r -> Some (r, r.Model<'TR>())
+                | Some r -> Some (r, r.ToModel<'TR>())
                 | None -> None
         |> FuncUtils.ignoreTupleOption
     member this.Capture<'TR>(_schema: 'TR) =
@@ -45,4 +51,4 @@ type RequestCapturer internal () =
     member this.CaptureAll() =
         captures |> Array.ofSeq
     member this.CaptureAll<'TR>(?_schema: 'TR) =
-        fun () -> captures |> Seq.map(fun c -> (c, c.Model<'TR>())) |> Array.ofSeq
+        fun () -> captures |> Seq.map(fun c -> (c, c.ToModel<'TR>())) |> Array.ofSeq

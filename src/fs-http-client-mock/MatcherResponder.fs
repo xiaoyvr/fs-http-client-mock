@@ -19,7 +19,7 @@ module private MatcherResponder =
         
     let MatchRequest<'TR> (matchFunc: RequestCapture -> 'TR option -> bool) (request: HttpRequestMessage)  =
         let capture = RequestCapture(request.RequestUri, request.Method, Option.ofObj request.Content)
-        let model = capture.Model<'TR>()
+        let model = capture.ToModel<'TR>()
         match matchFunc capture model with
             | true -> Some(request)
             | false -> None

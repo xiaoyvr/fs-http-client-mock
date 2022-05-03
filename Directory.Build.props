@@ -9,8 +9,6 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
 
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <!--  disabled because it's conflict with readme file pack. https://github.com/NuGet/Home/issues/10791 -->
-    <IncludeSymbols>false</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 </Project>

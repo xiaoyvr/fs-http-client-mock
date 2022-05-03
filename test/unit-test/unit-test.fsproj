@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>UnitTest</RootNamespace>
     <IsPackable>false</IsPackable>
     <GenerateProgramFile>true</GenerateProgramFile>

@@ -1,10 +1,10 @@
-FsHttpClientMock
-==============
+# FsHttpClientMock
 
 [![.NET](https://github.com/xiaoyvr/http-client-mock/actions/workflows/dotnet.yml/badge.svg)](https://github.com/xiaoyvr/http-client-mock/actions/workflows/dotnet.yml)
 
-
 A really simple http client mock.
+
+## Examples
 
 ### Match by simple url
 
@@ -15,7 +15,7 @@ public async void match_by_simple_url()
     var builder = new MockedHttpClientBuilder();
     builder
         .WhenGet("/Test")
-        .Respond(HttpStatusCode.OK);
+        .Respond(HttpStatusCode.OK);s
     using var httpClient = builder.Build("http://localhost:1122");
     var response = await httpClient.GetAsync("http://localhost:1122/test");
     Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -24,6 +24,7 @@ public async void match_by_simple_url()
 ```
 
 ### Return some response
+
 ```cs
 [Fact]
 public async void return_some_response()
@@ -56,10 +57,10 @@ public async void capture_request_being_sent()
     // when send the request
     var response = await httpClient.GetAsync("http://localhost:1122/test");
 
+    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     // should get the request by retriever
     var requestCapture = capture();
     Assert.NotNull(requestCapture);
-    Assert.Equal(HttpStatusCode.OK, response.StatusCode);                    
     Assert.Equal(HttpMethod.Get, requestCapture.HttpMethod);
     Assert.Equal("http://localhost:1122/test", requestCapture.RequestUri.ToString());
 }
@@ -87,7 +88,7 @@ public async void hamcrest_style_matchers()
 
 * **Matchers.WildCard**
 
-```cs	
+```cs
 builder
     .WhenGet(Matchers.Wildcard(@"/staffs/?"))
     .Respond(HttpStatusCode.Unauthorized);
@@ -100,4 +101,3 @@ builder
      .WhenGet(Matchers.Is("/staffs"))
      .Respond(HttpStatusCode.OK);
 ```
-

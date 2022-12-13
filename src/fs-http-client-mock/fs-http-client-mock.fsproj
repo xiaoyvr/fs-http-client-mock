@@ -11,7 +11,7 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/xiaoyvr/http-client-mock</RepositoryUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <TargetFrameworks>net5.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
     <EnablePackageValidation>true</EnablePackageValidation>
   </PropertyGroup>
   <ItemGroup>
